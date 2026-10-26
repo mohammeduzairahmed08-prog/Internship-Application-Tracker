@@ -35,3 +35,5 @@ Thumbs.db
 ### Environment / Secrets ###
 .env
 *.log
+Internship_Application_Tracker/
+*.zip

@@ -1,6 +1,30 @@
 # Internship Application Tracker
 
+[![Java 21](https://img.shields.io/badge/Java-21%20LTS-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://openjdk.org/projects/jdk/21/)
+[![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2.5-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
+[![MySQL](https://img.shields.io/badge/MySQL-8.0-4479A1?style=for-the-badge&logo=mysql&logoColor=white)](https://www.mysql.com/)
+[![Render](https://img.shields.io/badge/Deploy-Render-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://render.com)
+[![Railway](https://img.shields.io/badge/Deploy-Railway-0B0D0E?style=for-the-badge&logo=railway&logoColor=white)](https://railway.app)
+
 > A modern, full-stack web application designed for students and graduates to streamline internship applications, monitor real-time statuses, schedule interview rounds, track deadlines, and analyze job search success metrics.
+
+---
+
+## 🚀 Live Cloud Deployment
+
+* **Live Web Application**: [https://internship-application-tracker.onrender.com](https://internship-application-tracker.onrender.com)
+* **Alternative Mirror (Railway)**: [https://internship-application-tracker-production.up.railway.app](https://internship-application-tracker-production.up.railway.app)
+* **GitHub Repository**: [https://github.com/mohammeduzairahmed08-prog/Internship-Application-Tracker](https://github.com/mohammeduzairahmed08-prog/Internship-Application-Tracker)
+
+### 1-Click Deployment to Render
+1. Log in to [Render](https://render.com) using your GitHub account (`mohammeduzairahmed08-prog`).
+2. Click **New +** ➔ **Web Service** and select `mohammeduzairahmed08-prog/Internship-Application-Tracker`.
+3. Choose **Docker** environment (Render automatically picks up [`Dockerfile`](./Dockerfile)).
+4. Under **Environment Variables**, set:
+   * `SPRING_DATASOURCE_URL` = `jdbc:mysql://<YOUR_DB_HOST>:3306/internship_tracker?createDatabaseIfNotExist=true&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC`
+   * `SPRING_DATASOURCE_USERNAME` = `<YOUR_DB_USER>`
+   * `SPRING_DATASOURCE_PASSWORD` = `<YOUR_DB_PASSWORD>`
+5. Click **Deploy Web Service**.
 
 ---
 

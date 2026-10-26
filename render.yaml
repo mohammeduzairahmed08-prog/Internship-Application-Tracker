@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: internship-application-tracker
+    runtime: docker
+    plan: free
+    region: oregon
+    branch: main
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 8080
+      - key: SPRING_JPA_HIBERNATE_DDL_AUTO
+        value: update
+      - key: SPRING_JPA_SHOW_SQL
+        value: "false"
