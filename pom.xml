@@ -49,11 +49,18 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- In-memory Database for testing without live MySQL requirement -->
+        <!-- PostgreSQL Connector for Render and Cloud compatibility -->
+        <dependency>
+            <groupId>org.postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <scope>runtime</scope>
+        </dependency>
+
+        <!-- In-memory Database for instant cloud fallback & testing -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
-            <scope>test</scope>
+            <scope>runtime</scope>
         </dependency>
 
         <!-- Testing Starters -->
