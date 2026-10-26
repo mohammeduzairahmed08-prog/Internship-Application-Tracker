@@ -13,7 +13,11 @@
 ## 🚀 Live Cloud Deployment
 
 * **Live Web Application**: [https://internship-application-tracker-6q2w.onrender.com](https://internship-application-tracker-6q2w.onrender.com)
-* **Alternative Mirror (Railway)**: [https://internship-application-tracker-production.up.railway.app](https://internship-application-tracker-production.up.railway.app)
+### 🔑 Preloaded Demo Account (Mock Dataset Included)
+To explore the live dashboard with preloaded mock applications, interview schedules, metrics, and deadline reminders:
+* **Email**: `demo@internshiptracker.com`
+* **Password**: `DemoPassword123!`
+*(Or click the **"Quick Fill"** button directly on the sign-in page to log in instantly)*
 * **GitHub Repository**: [https://github.com/mohammeduzairahmed08-prog/Internship-Application-Tracker](https://github.com/mohammeduzairahmed08-prog/Internship-Application-Tracker)
 
 ### 1-Click Deployment to Render

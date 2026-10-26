@@ -5,6 +5,22 @@
 document.addEventListener('DOMContentLoaded', () => {
     // ----------------- Login Form -----------------
     const loginForm = document.getElementById('loginForm');
+    const fillDemoBtn = document.getElementById('fillDemoBtn');
+
+    if (fillDemoBtn) {
+        fillDemoBtn.addEventListener('click', () => {
+            const emailInput = document.getElementById('email');
+            const passwordInput = document.getElementById('password');
+            if (emailInput && passwordInput) {
+                emailInput.value = 'demo@internshiptracker.com';
+                passwordInput.value = 'DemoPassword123!';
+                if (loginForm) {
+                    loginForm.requestSubmit ? loginForm.requestSubmit() : loginForm.dispatchEvent(new Event('submit', { cancelable: true }));
+                }
+            }
+        });
+    }
+
     if (loginForm) {
         loginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
