@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 850" width="100%" height="100%" style="background:#f8fafc;font-family:Consolas,Monaco,monospace,sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.12"/></filter>
+    <marker id="diamond" markerWidth="14" markerHeight="14" refX="0" refY="7" orient="auto"><polygon points="7 0, 14 7, 7 14, 0 7" fill="#1e293b"/></marker>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#475569"/></marker>
+  </defs>
+
+  <text x="600" y="30" font-size="20" font-weight="bold" fill="#0f172a" text-anchor="middle" font-family="Segoe UI,sans-serif">CLASS DIAGRAM — INTERNSHIP APPLICATION TRACKER</text>
+
+  <!-- User Class -->
+  <g transform="translate(50, 70)" filter="url(#shadow)">
+    <rect x="0" y="0" width="260" height="230" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+    <rect x="0" y="0" width="260" height="30" rx="4" fill="#3b82f6"/>
+    <text x="130" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">User</text>
+    <line x1="0" y1="30" x2="260" y2="30" stroke="#3b82f6" stroke-width="2"/>
+    <text x="10" y="50" font-size="11" fill="#334155">- id: Long</text>
+    <text x="10" y="68" font-size="11" fill="#334155">- fullName: String</text>
+    <text x="10" y="86" font-size="11" fill="#334155">- email: String [unique]</text>
+    <text x="10" y="104" font-size="11" fill="#334155">- passwordHash: String</text>
+    <text x="10" y="122" font-size="11" fill="#334155">- createdAt: LocalDateTime</text>
+    <line x1="0" y1="135" x2="260" y2="135" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="10" y="155" font-size="11" fill="#0f766e">+ onCreate(): void</text>
+    <text x="10" y="173" font-size="11" fill="#0f766e">+ getId(): Long</text>
+    <text x="10" y="191" font-size="11" fill="#0f766e">+ getEmail(): String</text>
+    <text x="10" y="209" font-size="11" fill="#0f766e">+ getApplications(): List</text>
+  </g>
+
+  <!-- Application Class -->
+  <g transform="translate(420, 70)" filter="url(#shadow)">
+    <rect x="0" y="0" width="340" height="360" rx="4" fill="#ffffff" stroke="#4f46e5" stroke-width="2"/>
+    <rect x="0" y="0" width="340" height="30" rx="4" fill="#4f46e5"/>
+    <text x="170" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">Application</text>
+    <line x1="0" y1="30" x2="340" y2="30" stroke="#4f46e5" stroke-width="2"/>
+    <text x="10" y="50" font-size="11" fill="#334155">- id: Long</text>
+    <text x="10" y="68" font-size="11" fill="#334155">- companyName: String</text>
+    <text x="10" y="86" font-size="11" fill="#334155">- jobRole: String</text>
+    <text x="10" y="104" font-size="11" fill="#334155">- location: String</text>
+    <text x="10" y="122" font-size="11" fill="#334155">- workMode: WorkMode</text>
+    <text x="10" y="140" font-size="11" fill="#334155">- applicationDate: LocalDate</text>
+    <text x="10" y="158" font-size="11" fill="#334155">- deadline: LocalDate</text>
+    <text x="10" y="176" font-size="11" fill="#334155">- stipend: BigDecimal</text>
+    <text x="10" y="194" font-size="11" fill="#334155">- status: ApplicationStatus</text>
+    <text x="10" y="212" font-size="11" fill="#334155">- priority: Priority</text>
+    <text x="10" y="230" font-size="11" fill="#334155">- notes: String</text>
+    <line x1="0" y1="242" x2="340" y2="242" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="10" y="262" font-size="11" fill="#0f766e">+ onCreate(): void</text>
+    <text x="10" y="280" font-size="11" fill="#0f766e">+ onUpdate(): void</text>
+    <text x="10" y="298" font-size="11" fill="#0f766e">+ addInterview(i: Interview): void</text>
+    <text x="10" y="316" font-size="11" fill="#0f766e">+ removeInterview(i: Interview): void</text>
+    <text x="10" y="334" font-size="11" fill="#0f766e">+ getStatus(): ApplicationStatus</text>
+  </g>
+
+  <!-- Interview Class -->
+  <g transform="translate(860, 70)" filter="url(#shadow)">
+    <rect x="0" y="0" width="290" height="260" rx="4" fill="#ffffff" stroke="#059669" stroke-width="2"/>
+    <rect x="0" y="0" width="290" height="30" rx="4" fill="#059669"/>
+    <text x="145" y="20" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">Interview</text>
+    <line x1="0" y1="30" x2="290" y2="30" stroke="#059669" stroke-width="2"/>
+    <text x="10" y="50" font-size="11" fill="#334155">- id: Long</text>
+    <text x="10" y="68" font-size="11" fill="#334155">- interviewRound: String</text>
+    <text x="10" y="86" font-size="11" fill="#334155">- interviewDate: LocalDateTime</text>
+    <text x="10" y="104" font-size="11" fill="#334155">- interviewMode: InterviewMode</text>
+    <text x="10" y="122" font-size="11" fill="#334155">- meetingLink: String</text>
+    <text x="10" y="140" font-size="11" fill="#334155">- interviewerName: String</text>
+    <text x="10" y="158" font-size="11" fill="#334155">- outcome: InterviewOutcome</text>
+    <line x1="0" y1="172" x2="290" y2="172" stroke="#e2e8f0" stroke-width="1"/>
+    <text x="10" y="192" font-size="11" fill="#0f766e">+ onCreate(): void</text>
+    <text x="10" y="210" font-size="11" fill="#0f766e">+ getInterviewDate(): LocalDateTime</text>
+    <text x="10" y="228" font-size="11" fill="#0f766e">+ setOutcome(o: Outcome): void</text>
+  </g>
+
+  <!-- Connectors -->
+  <!-- User 1 to 0..* Application -->
+  <line x1="310" y1="170" x2="420" y2="170" stroke="#1e293b" stroke-width="2" marker-start="url(#diamond)"/>
+  <text x="325" y="160" font-size="11" fill="#475569">1</text>
+  <text x="390" y="160" font-size="11" fill="#475569">0..*</text>
+
+  <!-- Application 1 to 0..* Interview -->
+  <line x1="760" y1="170" x2="860" y2="170" stroke="#1e293b" stroke-width="2" marker-start="url(#diamond)"/>
+  <text x="775" y="160" font-size="11" fill="#475569">1</text>
+  <text x="830" y="160" font-size="11" fill="#475569">0..*</text>
+
+  <!-- Service Layer -->
+  <g transform="translate(50, 480)" filter="url(#shadow)">
+    <rect x="0" y="0" width="310" height="150" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+    <rect x="0" y="0" width="310" height="26" fill="#7c3aed"/>
+    <text x="155" y="18" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">DashboardService</text>
+    <text x="10" y="48" font-size="11" fill="#334155">+ getSummary(): DashboardSummaryResponse</text>
+    <text x="10" y="68" font-size="11" fill="#334155">+ getStatusDistribution(): List&lt;Status&gt;</text>
+    <text x="10" y="88" font-size="11" fill="#334155">+ getApplicationTrends(): List&lt;Trends&gt;</text>
+    <text x="10" y="108" font-size="11" fill="#334155">+ getUpcomingDeadlines(): List&lt;Deadlines&gt;</text>
+    <text x="10" y="128" font-size="11" fill="#334155">+ getUpcomingInterviews(): List&lt;Interviews&gt;</text>
+  </g>
+
+  <g transform="translate(420, 480)" filter="url(#shadow)">
+    <rect x="0" y="0" width="340" height="150" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+    <rect x="0" y="0" width="340" height="26" fill="#7c3aed"/>
+    <text x="170" y="18" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">ApplicationService</text>
+    <text x="10" y="48" font-size="11" fill="#334155">+ getApplications(...): Page&lt;ApplicationResponse&gt;</text>
+    <text x="10" y="68" font-size="11" fill="#334155">+ getApplicationById(id): ApplicationResponse</text>
+    <text x="10" y="88" font-size="11" fill="#334155">+ createApplication(req): ApplicationResponse</text>
+    <text x="10" y="108" font-size="11" fill="#334155">+ updateStatus(id, s): ApplicationResponse</text>
+    <text x="10" y="128" font-size="11" fill="#334155">+ deleteApplication(id): void</text>
+  </g>
+
+  <g transform="translate(820, 480)" filter="url(#shadow)">
+    <rect x="0" y="0" width="330" height="150" rx="4" fill="#ffffff" stroke="#7c3aed" stroke-width="1.5"/>
+    <rect x="0" y="0" width="330" height="26" fill="#7c3aed"/>
+    <text x="165" y="18" font-size="12" font-weight="bold" fill="#ffffff" text-anchor="middle" font-family="Segoe UI,sans-serif">InterviewService</text>
+    <text x="10" y="48" font-size="11" fill="#334155">+ getInterviewsForApplication(appId): List</text>
+    <text x="10" y="68" font-size="11" fill="#334155">+ scheduleInterview(appId, req): InterviewResp</text>
+    <text x="10" y="88" font-size="11" fill="#334155">+ updateInterview(id, req): InterviewResp</text>
+    <text x="10" y="108" font-size="11" fill="#334155">+ deleteInterview(id): void</text>
+    <text x="10" y="128" font-size="11" fill="#334155">+ getUpcomingInterviews(): List</text>
+  </g>
+
+  <!-- Enums at Bottom -->
+  <g transform="translate(50, 680)">
+    <rect x="0" y="0" width="1090" height="120" rx="4" fill="#f1f5f9" stroke="#cbd5e1"/>
+    <text x="20" y="25" font-size="12" font-weight="bold" fill="#1e293b" font-family="Segoe UI,sans-serif">&lt;&lt;enumerations&gt;&gt;</text>
+    <text x="20" y="55" font-size="11" fill="#4338ca" font-weight="bold">ApplicationStatus:</text>
+    <text x="20" y="75" font-size="10" fill="#334155">WISHLIST | APPLIED | ONLINE_ASSESSMENT | INTERVIEW_SCHEDULED | INTERVIEW_COMPLETED | OFFER_RECEIVED | REJECTED | WITHDRAWN</text>
+    <text x="20" y="100" font-size="11" fill="#4338ca" font-weight="bold">WorkMode:</text> <text x="100" y="100" font-size="10" fill="#334155">REMOTE | HYBRID | ON_SITE</text>
+    <text x="320" y="100" font-size="11" fill="#4338ca" font-weight="bold">Priority:</text> <text x="385" y="100" font-size="10" fill="#334155">LOW | MEDIUM | HIGH</text>
+    <text x="560" y="100" font-size="11" fill="#4338ca" font-weight="bold">InterviewOutcome:</text> <text x="690" y="100" font-size="10" fill="#334155">PENDING | PASSED | FAILED</text>
+  </g>
+</svg>

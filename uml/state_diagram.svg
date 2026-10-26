@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 700" width="100%" height="100%" style="background:#f8fafc;font-family:Segoe UI,Helvetica,Arial,sans-serif;">
+  <defs>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%"><feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/></filter>
+    <marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#4338ca"/></marker>
+    <marker id="arrRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><polygon points="0 0, 10 3, 0 6" fill="#dc2626"/></marker>
+  </defs>
+
+  <text x="550" y="35" font-size="20" font-weight="bold" fill="#0f172a" text-anchor="middle">STATE DIAGRAM — APPLICATION LIFECYCLE</text>
+
+  <!-- Initial State -->
+  <circle cx="80" cy="120" r="14" fill="#0f172a"/>
+  <line x1="94" y1="120" x2="160" y2="120" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+
+  <!-- Wishlist -->
+  <g transform="translate(160, 95)" filter="url(#shadow)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="#ffffff" stroke="#64748b" stroke-width="2"/>
+    <text x="70" y="30" font-size="13" font-weight="bold" fill="#1e293b" text-anchor="middle">Wishlist</text>
+  </g>
+
+  <!-- Wishlist -> Applied -->
+  <line x1="300" y1="120" x2="380" y2="120" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="340" y="112" font-size="10" fill="#4338ca" text-anchor="middle">submitApplication()</text>
+
+  <!-- Applied -->
+  <g transform="translate(380, 95)" filter="url(#shadow)">
+    <rect x="0" y="0" width="140" height="50" rx="8" fill="#ffffff" stroke="#3b82f6" stroke-width="2"/>
+    <text x="70" y="30" font-size="13" font-weight="bold" fill="#1e293b" text-anchor="middle">Applied</text>
+  </g>
+
+  <!-- Applied -> Online Assessment -->
+  <line x1="520" y1="120" x2="610" y2="120" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="565" y="112" font-size="10" fill="#4338ca" text-anchor="middle">inviteOA()</text>
+
+  <!-- Online Assessment -->
+  <g transform="translate(610, 95)" filter="url(#shadow)">
+    <rect x="0" y="0" width="160" height="50" rx="8" fill="#ffffff" stroke="#0284c7" stroke-width="2"/>
+    <text x="80" y="30" font-size="13" font-weight="bold" fill="#1e293b" text-anchor="middle">Online Assessment</text>
+  </g>
+
+  <!-- OA -> Interview Scheduled -->
+  <line x1="770" y1="120" x2="860" y2="120" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="815" y="112" font-size="10" fill="#4338ca" text-anchor="middle">oaPassed()</text>
+
+  <!-- Direct Shortlist Applied -> Interview Scheduled -->
+  <path d="M 450 95 C 450 40, 930 40, 930 95" fill="none" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="690" y="50" font-size="10" fill="#4338ca" text-anchor="middle">directShortlist()</text>
+
+  <!-- Interview Scheduled -->
+  <g transform="translate(850, 95)" filter="url(#shadow)">
+    <rect x="0" y="0" width="170" height="50" rx="8" fill="#ffffff" stroke="#f59e0b" stroke-width="2"/>
+    <text x="85" y="30" font-size="13" font-weight="bold" fill="#1e293b" text-anchor="middle">Interview Scheduled</text>
+  </g>
+
+  <!-- Interview Scheduled -> Interview Completed -->
+  <line x1="935" y1="145" x2="935" y2="245" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="945" y="200" font-size="10" fill="#4338ca">attendInterview()</text>
+
+  <!-- Interview Completed -->
+  <g transform="translate(850, 245)" filter="url(#shadow)">
+    <rect x="0" y="0" width="170" height="50" rx="8" fill="#ffffff" stroke="#ea580c" stroke-width="2"/>
+    <text x="85" y="30" font-size="13" font-weight="bold" fill="#1e293b" text-anchor="middle">Interview Completed</text>
+  </g>
+
+  <!-- Loop back next round -->
+  <path d="M 1020 270 C 1080 270, 1080 120, 1020 120" fill="none" stroke="#4338ca" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="1085" y="200" font-size="10" fill="#4338ca">nextRoundRequired()</text>
+
+  <!-- Interview Completed -> Offer Received -->
+  <path d="M 850 270 C 720 270, 720 370, 720 395" fill="none" stroke="#16a34a" stroke-width="2" marker-end="url(#arr)"/>
+  <text x="730" y="340" font-size="10" fill="#16a34a" font-weight="bold">allRoundsPassed()</text>
+
+  <!-- Offer Received -->
+  <g transform="translate(640, 395)" filter="url(#shadow)">
+    <rect x="0" y="0" width="160" height="55" rx="8" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="80" y="33" font-size="13" font-weight="bold" fill="#166534" text-anchor="middle">&#127942; Offer Received</text>
+  </g>
+
+  <!-- Rejections -->
+  <!-- Applied -> Rejected -->
+  <path d="M 450 145 C 450 260, 450 340, 450 395" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrRed)"/>
+  <text x="455" y="270" font-size="10" fill="#dc2626">screeningRejected()</text>
+
+  <!-- OA -> Rejected -->
+  <path d="M 680 145 C 680 280, 500 340, 480 395" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrRed)"/>
+
+  <!-- Interview Completed -> Rejected -->
+  <path d="M 880 295 C 880 360, 530 380, 500 410" fill="none" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arrRed)"/>
+  <text x="750" y="375" font-size="10" fill="#dc2626">interviewFailed()</text>
+
+  <!-- Rejected -->
+  <g transform="translate(370, 395)" filter="url(#shadow)">
+    <rect x="0" y="0" width="140" height="55" rx="8" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+    <text x="70" y="33" font-size="13" font-weight="bold" fill="#991b1b" text-anchor="middle">&#10060; Rejected</text>
+  </g>
+
+  <!-- Withdrawn -->
+  <g transform="translate(130, 395)" filter="url(#shadow)">
+    <rect x="0" y="0" width="140" height="55" rx="8" fill="#f3f4f6" stroke="#4b5563" stroke-width="2"/>
+    <text x="70" y="33" font-size="13" font-weight="bold" fill="#1f2937" text-anchor="middle">Withdrawn</text>
+  </g>
+  <path d="M 400 145 C 300 240, 200 280, 200 395" fill="none" stroke="#6b7280" stroke-width="1.5" stroke-dasharray="4" marker-end="url(#arr)"/>
+  <text x="210" y="270" font-size="10" fill="#6b7280">candidateWithdraws()</text>
+
+  <!-- Final State -->
+  <g transform="translate(480, 580)">
+    <circle cx="20" cy="20" r="16" fill="#ffffff" stroke="#0f172a" stroke-width="2"/>
+    <circle cx="20" cy="20" r="10" fill="#0f172a"/>
+  </g>
+  <line x1="200" y1="450" x2="480" y2="590" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="440" y1="450" x2="490" y2="580" stroke="#94a3b8" stroke-width="1.5"/>
+  <line x1="720" y1="450" x2="520" y2="590" stroke="#94a3b8" stroke-width="1.5"/>
+  <text x="500" y="630" font-size="11" font-weight="bold" fill="#475569" text-anchor="middle">Final State (Archived)</text>
+</svg>
