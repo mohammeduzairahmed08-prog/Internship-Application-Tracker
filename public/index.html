@@ -1,0 +1,656 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internship Application Tracker - Dashboard</title>
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.2/dist/chart.umd.min.js"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+        <div class="brand">
+            <i class="bi bi-briefcase-fill"></i>
+            <span>InternTracker</span>
+        </div>
+        <nav class="sidebar-nav">
+            <a href="#dashboard" class="sidebar-link active" data-view="dashboardView">
+                <i class="bi bi-grid-1x2-fill"></i>
+                <span>Dashboard</span>
+            </a>
+            <a href="#applications" class="sidebar-link" data-view="applicationsView">
+                <i class="bi bi-folder2-open"></i>
+                <span>My Applications</span>
+            </a>
+            <a href="#interviews" class="sidebar-link" data-view="interviewsView">
+                <i class="bi bi-calendar-event"></i>
+                <span>Interviews</span>
+            </a>
+            <a href="#deadlines" class="sidebar-link" data-view="deadlinesView">
+                <i class="bi bi-clock-history"></i>
+                <span>Deadlines &amp; Alerts</span>
+            </a>
+            <div class="mt-3 px-2">
+                <button class="btn btn-primary w-100 py-2 d-flex align-items-center justify-content-center gap-2 shadow-sm" onclick="openNewApplicationModal()">
+                    <i class="bi bi-plus-circle-fill"></i>
+                    <span>New Application</span>
+                </button>
+            </div>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="d-flex align-items-center justify-content-between">
+                <div class="d-flex align-items-center gap-2 overflow-hidden">
+                    <div class="user-avatar" id="sidebarAvatar">U</div>
+                    <div class="overflow-hidden">
+                        <div class="fw-semibold text-white small text-truncate" id="sidebarUserName">Loading...</div>
+                        <div class="text-muted text-truncate" style="font-size: 0.75rem;" id="sidebarUserEmail">...</div>
+                    </div>
+                </div>
+                <button class="btn btn-link text-muted p-1 hover-text-white" title="Sign Out" onclick="logout()">
+                    <i class="bi bi-box-arrow-right fs-5"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Wrapper -->
+    <div class="main-wrapper">
+        <!-- Top Navigation -->
+        <header class="topbar">
+            <div class="d-flex align-items-center gap-3">
+                <button class="btn btn-sm btn-outline-secondary d-lg-none" onclick="toggleSidebar()">
+                    <i class="bi bi-list fs-5"></i>
+                </button>
+                <div class="topbar-search d-none d-md-block">
+                    <i class="bi bi-search"></i>
+                    <input type="text" id="globalSearchInput" class="form-control" placeholder="Search company, role..." onkeydown="handleGlobalSearch(event)">
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3">
+                <div class="dropdown">
+                    <button class="btn btn-light position-relative rounded-circle p-2" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="bi bi-bell fs-5 text-secondary"></i>
+                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" id="notificationBadge">
+                            0
+                        </span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 p-2" style="width: 300px;" id="notificationDropdown">
+                        <li class="dropdown-header fw-bold text-uppercase small">Approaching Deadlines</li>
+                        <div id="notificationList" class="small text-muted p-2">No upcoming alerts</div>
+                    </ul>
+                </div>
+                <div class="dropdown">
+                    <button class="btn btn-light d-flex align-items-center gap-2 rounded-pill px-3 py-1 border" data-bs-toggle="dropdown">
+                        <div class="user-avatar" style="width:28px;height:28px;font-size:0.8rem;" id="topbarAvatar">U</div>
+                        <span class="fw-medium small" id="topbarUserName">Account</span>
+                        <i class="bi bi-chevron-down small text-muted"></i>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
+                        <li><a class="dropdown-item small" href="#" onclick="switchView('applicationsView')"><i class="bi bi-briefcase me-2"></i>My Applications</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item small text-danger" href="#" onclick="logout()"><i class="bi bi-box-arrow-right me-2"></i>Sign Out</a></li>
+                    </ul>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Body Views -->
+        <main class="p-4">
+
+            <!-- ================= VIEW 1: DASHBOARD ================= -->
+            <section id="dashboardView" class="app-view">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Internship Search Dashboard</h4>
+                        <p class="text-muted small mb-0">Overview of your ongoing applications, interviews, and success rates</p>
+                    </div>
+                    <button class="btn btn-primary d-flex align-items-center gap-2" onclick="openNewApplicationModal()">
+                        <i class="bi bi-plus-lg"></i>
+                        <span>Add Application</span>
+                    </button>
+                </div>
+
+                <!-- KPI Metric Cards Grid -->
+                <div class="row g-3 mb-4">
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#e0e7ff;color:#4338ca;">
+                                <i class="bi bi-folder-fill"></i>
+                            </div>
+                            <div class="kpi-title">Total Applications</div>
+                            <div class="kpi-value" id="kpiTotal">0</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#e0f2fe;color:#0284c7;">
+                                <i class="bi bi-send-fill"></i>
+                            </div>
+                            <div class="kpi-title">Submitted</div>
+                            <div class="kpi-value" id="kpiSubmitted">0</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#ccfbf1;color:#0d9488;">
+                                <i class="bi bi-laptop"></i>
+                            </div>
+                            <div class="kpi-title">In Assessment</div>
+                            <div class="kpi-value" id="kpiAssessment">0</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#fef3c7;color:#d97706;">
+                                <i class="bi bi-people-fill"></i>
+                            </div>
+                            <div class="kpi-title">Interviews</div>
+                            <div class="kpi-value" id="kpiInterviews">0</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#dcfce7;color:#16a34a;">
+                                <i class="bi bi-trophy-fill"></i>
+                            </div>
+                            <div class="kpi-title">Offers Received</div>
+                            <div class="kpi-value" id="kpiOffers">0</div>
+                        </div>
+                    </div>
+                    <div class="col-sm-6 col-xl-2">
+                        <div class="kpi-card">
+                            <div class="kpi-icon-wrapper" style="background:#fee2e2;color:#dc2626;">
+                                <i class="bi bi-x-circle-fill"></i>
+                            </div>
+                            <div class="kpi-title">Rejected</div>
+                            <div class="kpi-value" id="kpiRejected">0</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Charts Row & Success Rate Card -->
+                <div class="row g-4 mb-4">
+                    <div class="col-lg-7">
+                        <div class="app-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-graph-up text-primary me-2"></i>Applications Submitted Over Time</h6>
+                                <span class="badge bg-light text-muted fw-normal">Past 30 Days</span>
+                            </div>
+                            <div style="position: relative; height: 260px;">
+                                <canvas id="trendChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-5">
+                        <div class="app-card p-3 h-100">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-pie-chart text-info me-2"></i>Status Distribution</h6>
+                                <div class="badge bg-success-subtle text-success border border-success-subtle px-2 py-1">
+                                    Success Rate: <strong id="kpiSuccessRate">0%</strong>
+                                </div>
+                            </div>
+                            <div style="position: relative; height: 260px;">
+                                <canvas id="statusChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Reminders & Interviews Row -->
+                <div class="row g-4">
+                    <!-- Upcoming Deadlines within 7 days -->
+                    <div class="col-lg-6">
+                        <div class="app-card h-100">
+                            <div class="card-header-clean">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-hourglass-split text-warning fs-5"></i>
+                                    <h6 class="fw-bold mb-0">Deadlines Approaching (7 Days)</h6>
+                                </div>
+                                <span class="badge bg-warning text-dark" id="upcomingDeadlinesBadge">0 Alerts</span>
+                            </div>
+                            <div class="p-3" id="dashboardDeadlinesContainer">
+                                <div class="text-center text-muted py-4 small">Loading deadlines...</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Upcoming Interviews -->
+                    <div class="col-lg-6">
+                        <div class="app-card h-100">
+                            <div class="card-header-clean">
+                                <div class="d-flex align-items-center gap-2">
+                                    <i class="bi bi-calendar-check text-primary fs-5"></i>
+                                    <h6 class="fw-bold mb-0">Upcoming Scheduled Interviews</h6>
+                                </div>
+                                <span class="badge bg-primary" id="upcomingInterviewsBadge">0 Upcoming</span>
+                            </div>
+                            <div class="p-3" id="dashboardInterviewsContainer">
+                                <div class="text-center text-muted py-4 small">Loading upcoming interviews...</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 2: MY APPLICATIONS ================= -->
+            <section id="applicationsView" class="app-view d-none">
+                <div class="d-flex flex-wrap justify-content-between align-items-center gap-3 mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Internship Applications</h4>
+                        <p class="text-muted small mb-0">Manage, filter, and track all your applications</p>
+                    </div>
+                    <button class="btn btn-primary d-flex align-items-center gap-2" onclick="openNewApplicationModal()">
+                        <i class="bi bi-plus-lg"></i>
+                        <span>Add Application</span>
+                    </button>
+                </div>
+
+                <!-- Filter & Search Toolbar -->
+                <div class="app-card p-3 mb-4">
+                    <div class="row g-2 align-items-center">
+                        <div class="col-md-3">
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-white"><i class="bi bi-search text-muted"></i></span>
+                                <input type="text" id="filterSearch" class="form-control" placeholder="Company or Role..." oninput="debounceLoadApplications()">
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="filterStatus" class="form-select form-select-sm" onchange="loadApplications(0)">
+                                <option value="">All Statuses</option>
+                                <option value="WISHLIST">Wishlist</option>
+                                <option value="APPLIED">Applied</option>
+                                <option value="ONLINE_ASSESSMENT">Online Assessment</option>
+                                <option value="INTERVIEW_SCHEDULED">Interview Scheduled</option>
+                                <option value="INTERVIEW_COMPLETED">Interview Completed</option>
+                                <option value="OFFER_RECEIVED">Offer Received</option>
+                                <option value="REJECTED">Rejected</option>
+                                <option value="WITHDRAWN">Withdrawn</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <select id="filterWorkMode" class="form-select form-select-sm" onchange="loadApplications(0)">
+                                <option value="">All Work Modes</option>
+                                <option value="REMOTE">Remote</option>
+                                <option value="HYBRID">Hybrid</option>
+                                <option value="ON_SITE">On-site</option>
+                            </select>
+                        </div>
+                        <div class="col-md-2">
+                            <input type="text" id="filterLocation" class="form-control form-control-sm" placeholder="Location..." oninput="debounceLoadApplications()">
+                        </div>
+                        <div class="col-md-2">
+                            <select id="filterSort" class="form-select form-select-sm" onchange="loadApplications(0)">
+                                <option value="createdAt,desc">Newest First</option>
+                                <option value="deadline,asc">Deadline (Soonest)</option>
+                                <option value="companyName,asc">Company Name (A-Z)</option>
+                                <option value="applicationDate,desc">Application Date</option>
+                            </select>
+                        </div>
+                        <div class="col-md-1 text-end">
+                            <button class="btn btn-outline-secondary btn-sm w-100" title="Reset Filters" onclick="resetFilters()">
+                                <i class="bi bi-arrow-counterclockwise"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Applications Data Table -->
+                <div class="app-card">
+                    <div class="table-responsive">
+                        <table class="table custom-table table-hover mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Role &amp; Mode</th>
+                                    <th>Application Date</th>
+                                    <th>Deadline</th>
+                                    <th>Stipend</th>
+                                    <th>Status</th>
+                                    <th>Priority</th>
+                                    <th class="text-end">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody id="applicationsTableBody">
+                                <tr>
+                                    <td colspan="8" class="text-center text-muted py-4">Loading applications...</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Pagination -->
+                    <div class="d-flex justify-content-between align-items-center p-3 border-top" id="paginationWrapper">
+                        <div class="text-muted small" id="paginationInfo">Showing 0 of 0</div>
+                        <nav>
+                            <ul class="pagination pagination-sm mb-0" id="paginationList"></ul>
+                        </nav>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 3: INTERVIEWS ================= -->
+            <section id="interviewsView" class="app-view d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Interview Schedules</h4>
+                        <p class="text-muted small mb-0">Upcoming rounds, video links, notes, and preparation tracking</p>
+                    </div>
+                </div>
+
+                <div class="app-card p-3">
+                    <div id="allInterviewsListContainer">
+                        <div class="text-center text-muted py-4">Loading interviews...</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ================= VIEW 4: DEADLINES & ALERTS ================= -->
+            <section id="deadlinesView" class="app-view d-none">
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div>
+                        <h4 class="fw-bold mb-1">Deadlines &amp; Reminders</h4>
+                        <p class="text-muted small mb-0">Never miss an application deadline or interview preparation milestone</p>
+                    </div>
+                </div>
+
+                <div class="row g-4">
+                    <div class="col-lg-6">
+                        <div class="app-card">
+                            <div class="card-header-clean bg-danger-subtle text-danger">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-exclamation-triangle-fill me-2"></i>Overdue Deadlines</h6>
+                            </div>
+                            <div class="p-3" id="overdueListContainer">
+                                <div class="text-muted small text-center py-3">No overdue applications</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="app-card">
+                            <div class="card-header-clean bg-warning-subtle text-warning-emphasis">
+                                <h6 class="fw-bold mb-0"><i class="bi bi-clock-history me-2"></i>Upcoming Deadlines (Within 7 Days)</h6>
+                            </div>
+                            <div class="p-3" id="activeUpcomingListContainer">
+                                <div class="text-muted small text-center py-3">No immediate deadlines</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- ================= MODALS ================= -->
+
+    <!-- Application Form Modal (Create & Edit) -->
+    <div class="modal fade" id="applicationModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="applicationModalTitle">Add Internship Application</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="applicationForm" onsubmit="handleApplicationSubmit(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="appEditId">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Company Name <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="formCompany" required placeholder="e.g. Google, Microsoft, Startup">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Internship / Job Role <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="formRole" required placeholder="e.g. Software Engineer Intern">
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">Work Mode <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formWorkMode" required>
+                                    <option value="REMOTE">Remote</option>
+                                    <option value="HYBRID">Hybrid</option>
+                                    <option value="ON_SITE">On-site</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">Status <span class="text-danger">*</span></label>
+                                <select class="form-select" id="formStatus" required>
+                                    <option value="WISHLIST">Wishlist</option>
+                                    <option value="APPLIED" selected>Applied</option>
+                                    <option value="ONLINE_ASSESSMENT">Online Assessment</option>
+                                    <option value="INTERVIEW_SCHEDULED">Interview Scheduled</option>
+                                    <option value="INTERVIEW_COMPLETED">Interview Completed</option>
+                                    <option value="OFFER_RECEIVED">Offer Received</option>
+                                    <option value="REJECTED">Rejected</option>
+                                    <option value="WITHDRAWN">Withdrawn</option>
+                                </select>
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label fw-semibold small">Priority</label>
+                                <select class="form-select" id="formPriority">
+                                    <option value="LOW">Low</option>
+                                    <option value="MEDIUM" selected>Medium</option>
+                                    <option value="HIGH">High</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Application Date <span class="text-danger">*</span></label>
+                                <input type="date" class="form-control" id="formApplicationDate" required>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Application Deadline</label>
+                                <input type="date" class="form-control" id="formDeadline">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Location</label>
+                                <input type="text" class="form-control" id="formLocation" placeholder="e.g. New York, NY or San Francisco, CA">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Expected Stipend / Salary ($)</label>
+                                <input type="number" step="0.01" min="0" class="form-control" id="formStipend" placeholder="e.g. 5000">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Application / Job Post URL</label>
+                                <input type="url" class="form-control" id="formAppUrl" placeholder="https://careers.company.com/job/123">
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Company Website</label>
+                                <input type="url" class="form-control" id="formWebsite" placeholder="https://company.com">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small">Job Description</label>
+                                <textarea class="form-control" id="formDescription" rows="2" placeholder="Key qualifications, requirements, or team overview"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold small">Personal Notes</label>
+                                <textarea class="form-control" id="formNotes" rows="2" placeholder="Referral contacts, interview tips, follow-up dates"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSaveApp">Save Application</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Application Details & Interview Timeline Modal -->
+    <div class="modal fade" id="applicationDetailsModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div>
+                        <h5 class="modal-title fw-bold" id="detailCompanyName">Company</h5>
+                        <p class="text-muted small mb-0" id="detailJobRole">Role</p>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <span id="detailStatusBadge" class="status-badge">Status</span>
+                        <span id="detailWorkModeBadge" class="badge bg-light text-dark border">Work Mode</span>
+                        <span id="detailPriorityBadge" class="priority-badge">Priority</span>
+                    </div>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Application Date</span>
+                            <strong id="detailAppDate" class="small">-</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Deadline</span>
+                            <strong id="detailDeadline" class="small">-</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Stipend</span>
+                            <strong id="detailStipend" class="small">-</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Location</span>
+                            <span id="detailLocation" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Company Website</span>
+                            <span id="detailWebsite" class="small">-</span>
+                        </div>
+                        <div class="col-md-4">
+                            <span class="text-muted small d-block">Job Posting</span>
+                            <span id="detailUrl" class="small">-</span>
+                        </div>
+                    </div>
+
+                    <!-- Personal Notes -->
+                    <div class="mb-4">
+                        <h6 class="fw-bold small text-uppercase text-secondary mb-1">Personal Notes</h6>
+                        <div class="p-3 bg-light rounded border text-muted small" id="detailNotes">No notes added.</div>
+                    </div>
+
+                    <!-- Interview Rounds Section -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold small text-uppercase text-secondary mb-0">Interviews &amp; Rounds</h6>
+                        <button class="btn btn-sm btn-outline-primary" id="btnDetailAddInterview" onclick="openScheduleInterviewFromDetails()">
+                            <i class="bi bi-plus-circle me-1"></i>Schedule Interview
+                        </button>
+                    </div>
+                    <div id="detailInterviewsContainer" class="border rounded p-3 bg-light">
+                        <div class="text-muted small text-center">No interview rounds scheduled yet</div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline-danger btn-sm me-auto" id="btnDetailDelete" onclick="deleteCurrentApplication()">
+                        <i class="bi bi-trash me-1"></i>Delete Application
+                    </button>
+                    <button type="button" class="btn btn-primary btn-sm" id="btnDetailEdit" onclick="editCurrentApplication()">
+                        <i class="bi bi-pencil me-1"></i>Edit
+                    </button>
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Schedule Interview Modal -->
+    <div class="modal fade" id="interviewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title fw-bold" id="interviewModalTitle">Schedule Interview Round</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="interviewForm" onsubmit="handleInterviewSubmit(event)">
+                    <div class="modal-body">
+                        <input type="hidden" id="interviewAppId">
+                        <input type="hidden" id="interviewEditId">
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Interview Round <span class="text-danger">*</span></label>
+                            <input type="text" class="form-control" id="intRound" required placeholder="e.g. Technical Round 1, Behavioral, System Design">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Date &amp; Time <span class="text-danger">*</span></label>
+                            <input type="datetime-local" class="form-control" id="intDate" required>
+                        </div>
+                        <div class="row g-2 mb-3">
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Interview Mode</label>
+                                <select class="form-select" id="intMode">
+                                    <option value="ONLINE">Online / Video</option>
+                                    <option value="PHONE">Phone Call</option>
+                                    <option value="IN_PERSON">In-person</option>
+                                </select>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold small">Outcome</label>
+                                <select class="form-select" id="intOutcome">
+                                    <option value="PENDING" selected>Pending</option>
+                                    <option value="PASSED">Passed</option>
+                                    <option value="FAILED">Failed</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Meeting Link / Location</label>
+                            <input type="url" class="form-control" id="intLink" placeholder="https://meet.google.com/xxx-xxxx-xxx">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Interviewer Name(s)</label>
+                            <input type="text" class="form-control" id="intInterviewer" placeholder="e.g. Sarah Connor (Engineering Lead)">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Preparation Notes / Questions</label>
+                            <textarea class="form-control" id="intNotes" rows="2" placeholder="Topics to review, behavioral STAR stories, questions to ask"></textarea>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary" id="btnSaveInterview">Save Interview</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Status Update Modal -->
+    <div class="modal fade" id="quickStatusModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-sm modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title fw-bold">Update Status</h6>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="quickStatusAppId">
+                    <label class="form-label fw-semibold small">New Status</label>
+                    <select class="form-select" id="quickStatusSelect">
+                        <option value="WISHLIST">Wishlist</option>
+                        <option value="APPLIED">Applied</option>
+                        <option value="ONLINE_ASSESSMENT">Online Assessment</option>
+                        <option value="INTERVIEW_SCHEDULED">Interview Scheduled</option>
+                        <option value="INTERVIEW_COMPLETED">Interview Completed</option>
+                        <option value="OFFER_RECEIVED">Offer Received</option>
+                        <option value="REJECTED">Rejected</option>
+                        <option value="WITHDRAWN">Withdrawn</option>
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary btn-sm" onclick="saveQuickStatus()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/app.js"></script>
+</body>
+</html>
