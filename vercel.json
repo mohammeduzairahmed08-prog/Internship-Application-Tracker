@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "cleanUrls": true,
+  "outputDirectory": "src/main/resources/static",
+  "rewrites": [
+    {
+      "source": "/api/:match*",
+      "destination": "https://internship-application-tracker-6q2w.onrender.com/api/:match*"
+    }
+  ]
+}
